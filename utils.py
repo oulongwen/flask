@@ -23,10 +23,12 @@ files = {
     ],
     "cfp": "",
     "cap": [
-        "static/Algae CAP via BDO.xlsm",
-        "static/Algae CAP via acids.xlsm",
+        # "static/Algae CAP via BDO.xlsm",
+        # "static/Algae CAP via acids.xlsm",
+        "static/Algae CAP via BDO_2022.xlsm",
+        "static/Algae CAP via Acids_2022.xlsm",
     ],
-    "ahtl": "",
+    "ahtl": "static/Algae HTL_2022 SOT.xlsm",
     "idl": "",
 }
 
@@ -735,6 +737,7 @@ def process(step_mapping, looped=False):
     """
     Process the LCI data by converting inputs from another stage to its corresponding LCI data.
     """
+    to_process = False
     for key, value in step_mapping.items():
         if used_other_process(value):
             out = value[value["Type"] == "Input from Another Stage"]
@@ -744,13 +747,9 @@ def process(step_mapping, looped=False):
                 if used_other_process(step_mapping[other_proc]):
                     to_process = False
                     break
-            if to_process:
-                step_mapping = step_processing(step_mapping, key)
-                step_mapping = process(step_mapping)
-            else:
-                return "error"
-        else:
-            pass
+        if to_process:
+            step_mapping = step_processing(step_mapping, key)
+            step_mapping = process(step_mapping)
     return step_mapping
 
 
